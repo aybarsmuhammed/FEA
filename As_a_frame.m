@@ -1,0 +1,53 @@
+clear
+clc
+Ang=[90 330 241.4 141.3 22];
+kGlobal=[2.44*10^7 2.07*10^7 2.51*10^7 3.43*10^7 2.22*10^7];
+ArrGlobal={zeros(4),zeros(4),zeros(4),zeros(4),zeros(4)}
+for i=1:5
+    ArrGlobal{i}(1,1)=(cos(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(1,2)=(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(1,3)=-(cos(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(2,1)=(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(3,1)=-(cos(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(2,2)=(sin(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(2,3)=-(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(3,2)=-(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(3,3)=(cos(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(1,4)=-(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(2,4)=-(sin(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(3,4)=(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(4,4)=(sin(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(4,3)=(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}(4,2)=-(sin(degtorad(Ang(i))))^2;
+    ArrGlobal{i}(4,1)=-(cos(degtorad(Ang(i))))*(sin(degtorad(Ang(i))));
+    ArrGlobal{i}=ArrGlobal{i}*kGlobal(i)
+    ArrGlobal{i}
+end
+K=zeros(8);
+%1-2
+K(1:2,1:2)=K(1:2,1:2)+ArrGlobal{1}(1:2,1:2);
+K(1:2,3:4)=K(1:2,3:4)+ArrGlobal{1}(1:2,3:4);
+K(3:4,1:2)=K(3:4,1:2)+ArrGlobal{1}(3:4,1:2);
+K(3:4,3:4)=K(3:4,3:4)+ArrGlobal{1}(3:4,3:4);
+%2-3
+K(3:4,3:4)=K(3:4,3:4)+ArrGlobal{2}(1:2,1:2);
+K(3:4,5:6)=K(3:4,5:6)+ArrGlobal{2}(1:2,3:4);
+K(5:6,3:4)=K(5:6,3:4)+ArrGlobal{2}(3:4,1:2);
+K(5:6,5:6)=K(5:6,5:6)+ArrGlobal{2}(3:4,3:4);
+%3-4
+K(5:6,5:6)=K(5:6,5:6)+ArrGlobal{3}(1:2,1:2);
+K(5:6,7:8)=K(5:6,7:8)+ArrGlobal{3}(1:2,3:4);
+K(7:8,5:6)=K(7:8,5:6)+ArrGlobal{3}(3:4,1:2);
+K(7:8,7:8)=K(7:8,7:8)+ArrGlobal{3}(3:4,3:4);
+%4-1
+K(1:2,1:2)=K(1:2,1:2)+ArrGlobal{4}(1:2,1:2);
+K(1:2,7:8)=K(1:2,7:8)+ArrGlobal{4}(1:2,3:4);
+K(7:8,1:2)=K(7:8,1:2)+ArrGlobal{4}(3:4,1:2);
+K(7:8,7:8)=K(7:8,7:8)+ArrGlobal{4}(3:4,3:4);
+%3-1
+K(1:2,1:2)=K(1:2,1:2)+ArrGlobal{5}(1:2,1:2);
+K(1:2,5:6)=K(1:2,5:6)+ArrGlobal{5}(1:2,3:4);
+K(5:6,1:2)=K(5:6,1:2)+ArrGlobal{5}(3:4,1:2);
+K(5:6,5:6)=K(5:6,5:6)+ArrGlobal{5}(3:4,3:4);
+
+K
